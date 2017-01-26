@@ -15,12 +15,16 @@ var client = &http.Client{}
 
 func check_url(full_url string, portion string, wg *sync.WaitGroup) {
 	resp, err := client.Get(full_url)
-	defer resp.Body.Close()
+
 	if err != nil {
-		fmt.Printf("Got an error: %s", err)
+		fmt.Printf("Got an error: %s\n", err)
+		return
 	}
-		
-	fmt.Printf("Scanning /%s: %d\n", portion, resp.StatusCode)
+
+	if resp.StatusCode == 200 {
+		fmt.Printf("/%s: Found\n", portion)
+	}
+	resp.Body.Close()
 	wg.Done()
 	return
 }
