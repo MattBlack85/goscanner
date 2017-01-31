@@ -13,12 +13,11 @@ var client = &http.Client{}
 
 
 func worker(jobs <-chan string, results chan <- string) {
-
 	for url := range jobs {
 		resp, err := client.Get(url)
 		if err != nil {
-			fmt.Printf("Got an error: %s\n", err)
-			return
+			results <- fmt.Sprintf("Got an error: %s\n", err)
+			continue
 		}
 
 		if resp.StatusCode == 200 {
